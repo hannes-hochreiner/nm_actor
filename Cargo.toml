@@ -6,6 +6,7 @@ edition = "2018"
 license = "MIT OR Apache-2.0"
 maintenance = { status = "as-is" }
 readme = "README.rst"
+repository = "https://github.com/hannes-hochreiner/nm_actor"
 
 [dependencies]
 log = "0.4"
