@@ -14,7 +14,7 @@ fn it_can_check_the_host_success() {
         list: list.clone()
     });
 
-    assert_eq!(act.check_host_reachable(String::from("hostname"), String::from("hostname.domain has address")).unwrap(), true);
+    assert_eq!(act.check_host_reachable(&String::from("hostname"), &String::from("hostname.domain has address")).unwrap(), true);
 
     let mut list = list.lock().unwrap();
 
@@ -32,7 +32,7 @@ fn it_can_check_the_host_fail() {
         list: list.clone()
     });
 
-    assert_eq!(act.check_host_reachable(String::from("hostname"), String::from("hostname.domain has address")).unwrap(), false);
+    assert_eq!(act.check_host_reachable(&String::from("hostname"), &String::from("hostname.domain has address")).unwrap(), false);
 
     let mut list = list.lock().unwrap();
 
@@ -50,7 +50,7 @@ fn it_can_activate_the_vpn() {
         list: list.clone()
     });
 
-    act.set_vpn_active(String::from("vpn"), true).unwrap();
+    act.set_vpn_active(&String::from("vpn"), true).unwrap();
 
     let mut list = list.lock().unwrap();
 
@@ -68,7 +68,7 @@ fn it_can_deactivate_the_vpn() {
         list: list.clone()
     });
 
-    act.set_vpn_active(String::from("vpn"), false).unwrap();
+    act.set_vpn_active(&String::from("vpn"), false).unwrap();
 
     let mut list = list.lock().unwrap();
 

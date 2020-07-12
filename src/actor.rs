@@ -21,15 +21,15 @@ impl<T: exec::Exec> Actor<T> {
         }
     }
 
-    pub fn check_host_reachable(&mut self, host: String, answer: String) -> Result<bool, Box<dyn Error>> {
-        Ok(self.exec.exec(format!("host"), vec![format!("-W"), format!("1"), host])?.contains(&answer))
+    pub fn check_host_reachable(&mut self, host: &String, answer: &String) -> Result<bool, Box<dyn Error>> {
+        Ok(self.exec.exec(&format!("host"), &vec![&format!("-W"), &format!("1"), host])?.contains(answer))
     }
 
-    pub fn set_vpn_active(&mut self, vpn: String, active: bool) -> Result<(), Box<dyn Error>> {
-        self.exec.exec(format!("nmcli"), vec![format!("c"), match active {
+    pub fn set_vpn_active(&mut self, vpn: &String, active: bool) -> Result<(), Box<dyn Error>> {
+        self.exec.exec(&format!("nmcli"), &vec![&format!("c"), &(match active {
             true => format!("up"),
             false => format!("down")
-        }, vpn])?;
+        }), vpn])?;
 
         Ok(())
     }

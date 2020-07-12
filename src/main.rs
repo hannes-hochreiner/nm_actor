@@ -21,12 +21,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     let mut actor = Actor::default();
-    let res = actor.check_host_reachable(host_name, answer)?;
+    let res = actor.check_host_reachable(&host_name, &answer)?;
 
     match res {
-        true => info!("host available => bringing vpn up"),
+        true => info!("host \"{}\" available => bringing vpn up", host_name),
         false => info!("host not available => bringing vpn down")
     }
 
-    actor.set_vpn_active(vpn_name, res)
+    actor.set_vpn_active(&vpn_name, res)
 }
