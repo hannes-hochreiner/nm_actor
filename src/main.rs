@@ -25,7 +25,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     match res {
         true => info!("host \"{}\" available => bringing vpn up", host_name),
-        false => info!("host not available => bringing vpn down")
+        false => info!("host \"{}\" not available => bringing vpn down", host_name)
     }
 
     actor.set_vpn_active(&vpn_name, res)
