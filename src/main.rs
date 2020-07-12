@@ -1,8 +1,9 @@
 #[macro_use] extern crate log;
-use std::process::Command;
 use std::env;
+use std::error::Error;
+use nm_actor::actor::Actor;
 
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
     let vpn_name = env::var("NM_ACTOR_VPN").expect("no vpn name (\"NM_ACTOR_VPN\") given");
     let host_name = env::var("NM_ACTOR_HOST").expect("no host name (\"NM_ACTOR_HOST\") given");
@@ -19,26 +20,13 @@ fn main() {
         std::process::exit(0);
     }
 
-    let output = Command::new("host")
-        .arg("-W")
-        .arg("1")
-        .arg(host_name)
-        .output()
-        .expect("failed to execute process");
-    let cmd;
+    let mut actor = Actor::default();
+    let res = actor.check_host_reachable(host_name, answer)?;
 
-    if String::from_utf8(output.stdout).unwrap().contains(&answer) {
-        info!("home network available => bringing vpn up");
-        cmd = "up";
-    } else {
-        info!("home network not available => bringing vpn down");
-        cmd = "down";
+    match res {
+        true => info!("host available => bringing vpn up"),
+        false => info!("host not available => bringing vpn down")
     }
 
-    Command::new("nmcli")
-        .arg("c")
-        .arg(cmd)
-        .arg(vpn_name)
-        .output()
-        .expect("failed to execute process");
+    actor.set_vpn_active(vpn_name, res)
 }
