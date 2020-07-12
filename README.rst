@@ -1,3 +1,6 @@
+.. image:: https://github.com/hannes-hochreiner/nm_actor/workflows/Rust/badge.svg
+  :alt: Rust
+
 NM_ACTOR
 ========
 
@@ -19,4 +22,9 @@ Deployment
 ----------
 
 "nm_actor" can be installed using cargo.
+
+.. code-block:: shell
+
+  cargo install --git https://github.com/hannes-hochreiner/nm_actor
+
 A shell script can then be created in "/etc/NetworkManager/dispatch.d" to call "nm_actor".
