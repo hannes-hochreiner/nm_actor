@@ -1,7 +1,7 @@
 #[macro_use] extern crate log;
 use std::env;
 use std::error::Error;
-use nm_actor::actor::Actor;
+use nm_actor::actor::{Actor, ActorError};
 
 fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
@@ -21,12 +21,53 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     let mut actor = Actor::default();
-    let res = actor.check_host_reachable(&host_name, &answer)?;
+    let host_reachable = actor.check_host_reachable(&host_name, &answer)?;
+    let connection_active = actor.check_connection_active(&*vpn_name)?;
 
-    match res {
-        true => info!("host \"{}\" available => bringing vpn up", host_name),
-        false => info!("host \"{}\" not available => bringing vpn down", host_name)
+    match (host_reachable, connection_active) {
+        (true, false) => {
+            info!("host \"{}\" available and connection \"{}\" inactive => bringing vpn up", host_name, vpn_name);
+            match actor.set_vpn_active(&vpn_name, host_reachable) {
+                Err(e) => warn!("setting connection status failed with error: {}", e),
+                _ => {},
+            }
+
+            match actor.check_connection_active(&*vpn_name)? == host_reachable {
+                true => {
+                    info!("bringing up connection \"{}\" succeeded", vpn_name);
+                    Ok(())
+                },
+                false => {
+                    error!("bringing up connection \"{}\" failed", vpn_name);
+                    Err(Box::new(ActorError::new(String::from("bringing up connection failed"))))
+                }
+            }
+        },
+        (false, true) => {
+            info!("host \"{}\" not available and connection \"{}\" active => bringing vpn down", host_name, vpn_name);
+            match actor.set_vpn_active(&vpn_name, host_reachable) {
+                Err(e) => warn!("setting connection status failed with error: {}", e),
+                _ => {},
+            }
+
+            match actor.check_connection_active(&*vpn_name)? == host_reachable {
+                true => {
+                    info!("bringing down connection \"{}\" succeeded", vpn_name);
+                    Ok(())
+                },
+                false => {
+                    error!("bringing down connection \"{}\" failed", vpn_name);
+                    Err(Box::new(ActorError::new(String::from("bringing down connection failed"))))
+                }
+            }
+        },
+        (true, true) => {
+            info!("host \"{}\" available and connection \"{}\" is active => no action required", host_name, vpn_name);
+            Ok(())
+        },
+        (false, false) => {
+            info!("host \"{}\" not available and connection \"{}\" is not active => no action required", host_name, vpn_name);
+            Ok(())
+        },
     }
-
-    actor.set_vpn_active(&vpn_name, res)
 }

@@ -22,7 +22,20 @@ impl<T: exec::Exec> Actor<T> {
     }
 
     pub fn check_host_reachable(&mut self, host: &String, answer: &String) -> Result<bool, Box<dyn Error>> {
-        Ok(self.exec.exec(&format!("host"), &vec![&format!("-W"), &format!("1"), host])?.contains(answer))
+        let res = self.exec.exec(&format!("host"), &vec![&format!("-W"), &format!("1"), host])?;
+
+        debug!("host command returned \"{}\"", res);
+
+        match res.contains(answer) {
+            true => {
+                debug!("host command return value contained the expected answer");
+                Ok(true)
+            },
+            false => {
+                debug!("host command return value did not contain the expected answer");
+                Ok(false)
+            }
+        }
     }
 
     pub fn set_vpn_active(&mut self, vpn: &String, active: bool) -> Result<(), Box<dyn Error>> {
@@ -32,6 +45,21 @@ impl<T: exec::Exec> Actor<T> {
         }), vpn])?;
 
         Ok(())
+    }
+
+    pub fn check_connection_active(&mut self, connection: &str) -> Result<bool, Box<dyn Error>> {
+        for line in self.exec.exec(&String::from("nmcli"), &vec![&String::from("-t"), &String::from("c")])?.split("\n") {
+            match line.split(":").nth(3) {
+                Some(s) => {
+                    if s == connection {
+                        return Ok(true);
+                    }
+                },
+                None => continue
+            }
+        }
+
+        Ok(false)
     }
 }
 
