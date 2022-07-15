@@ -11,7 +11,7 @@ Summary:        nm_actor
 # Upstream license specification: MIT OR Apache-2.0
 License:        MIT or ASL 2.0
 URL:            https://crates.io/crates/nm_actor
-Source:         %{crates_source}
+Source:         %{crate}-%{version}.tar
 
 #ExclusiveArch:  %{rust_arches}
 
