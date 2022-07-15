@@ -1,7 +1,7 @@
 <services>
     <service name="obs_scm">
         <param name="scm">git</param>
-        <param name="url">git://github.com/hannes-hochreiner/nm_actor.git</param>
+        <param name="url">https://github.com/hannes-hochreiner/nm_actor.git</param>
         <param name="versionformat">@PARENT_TAG@</param>
         <param name="versionrewrite-pattern">v(.*)</param>
         <param name="match-tag">v*</param>
