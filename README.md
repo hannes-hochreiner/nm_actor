@@ -11,7 +11,7 @@ Afterwards, it is checked whether the output of the command contains the expecte
 ## Environment Variables
 
 | Name | Value |
-| ----- | ----- | 
+| ----- | ----- |
 | RUST_LOG | The log level for the Rust "log" module |
 | NM_ACTOR_VPN | Id of the VPN connection to manage |
 | NM_ACTOR_HOST | Host to be checked |
