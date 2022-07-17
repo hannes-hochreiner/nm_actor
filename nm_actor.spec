@@ -4,7 +4,7 @@
 %global crate nm_actor
 
 Name:           rust-%{crate}
-Version:        1.0.6
+Version:        1.0.7
 Release:        %autorelease
 Summary:        nm_actor
 
