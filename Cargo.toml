@@ -8,6 +8,7 @@ maintenance = { status = "as-is" }
 readme = "README.md"
 repository = "https://github.com/hannes-hochreiner/nm_actor"
 description = "a tool to automatically activate and deactivate a VPN connection depending on the network environment"
+publish = false
 
 [dependencies]
 log = "0.4"
