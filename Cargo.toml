@@ -7,6 +7,7 @@ license = "MIT OR Apache-2.0"
 maintenance = { status = "as-is" }
 readme = "README.md"
 repository = "https://github.com/hannes-hochreiner/nm_actor"
+description = "a tool to automatically activate and deactivate a VPN connection depending on the network environment"
 
 [dependencies]
 log = "0.4"
