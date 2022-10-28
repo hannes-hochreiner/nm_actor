@@ -12,7 +12,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     debug!("{:?}", args);
 
-    if args[1] == "" {
+    if args[1].is_empty() {
         debug!("no device given => call ignored");
         std::process::exit(0);
     } else if args[1] == vpn_name {

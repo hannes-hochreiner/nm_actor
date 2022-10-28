@@ -8,7 +8,7 @@ pub struct MockExec {
 }
 
 impl Exec for MockExec {
-    fn exec(&mut self, command: &String, args: &Vec<&String>) -> Result<String, Box<dyn Error>> {
+    fn exec(&mut self, command: &str, args: &[&str]) -> Result<String, Box<dyn Error>> {
         let mut list = self.list.lock().unwrap();
 
         (*list).push(format!("exec: command:{:?} args:{:?}", command, args));
